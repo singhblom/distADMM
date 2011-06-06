@@ -13,8 +13,9 @@ cat nodelist |   # Supply input from a file.
 while read line   # As long as there is another line to read ...
 do
   nodeName=$(echo $line|cut -f1 -d:)
+  numCores=$(echo $line|cut -f2 -d:)
   echo "Starting $numCores workers on node $nodeName"
-  ssh $nodeName < startnode.sh $line
+  ssh $nodeName "/home/sgeadmin/startnode.sh $line > $line.log 2>&1 &"
 done
 
 # Then get needed libraries on the master
@@ -34,4 +35,4 @@ python setup.py install
 
 # Then start master.py
 cd /home/sgeadmin
-python master.py
+python master.py 100

@@ -21,7 +21,7 @@ workerIDs = []
 for nn,nc in [l.strip().split(':') for l in open('nodelist')]:
     for core in range(1,int(nc)+1):
         workerIDs.append("%s:%s"%(nn,core))
-
+workers = len(workerIDs)
 last_N = 0
 for i,this_N in enumerate(np.linspace(features/workers,features,workers)):
     np.savetxt("m%s.data"%i,A[:,last_N:this_N])

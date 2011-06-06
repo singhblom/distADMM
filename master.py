@@ -23,6 +23,13 @@ z = np.zeros(num_examples)
 u = np.zeros(num_examples)
 Ax = np.zeros(num_examples)
 
+workerIDs = []
+for nn,nc in [l.strip().split(':') for l in open('nodelist')]:
+    for core in range(1,int(nc)+1):
+        workerIDs.append("%s:%s"%(nn,core))
+num_workers = len(workerIDs)
+
+
 for iteration in range(num_iterations):
     # First send tasks for the x-update:
     bik = z-Ax-u
@@ -45,9 +52,7 @@ for task_nbr in range(num_workers):
     x_vals[sid] = np.array([float(ss) for ss in sdata.strip().split(' ')])
 
 xout = []
-for node in open("nodelist"):
-    nID,nCores = node.strip().split(':')
-    for i in range(1,int(nCores)+1): # bash counts inclusive
-        xout.extend(x_vals["%s:%s"%(nID,i)])
+for wID in workerIDs:
+    xout.extend(x_vals["%s:%s"%(nID,i)])
 
 np.savetxt("testx.data",np.array(xout))
