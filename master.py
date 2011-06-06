@@ -44,7 +44,7 @@ for iteration in range(num_iterations):
     zOld = z
     z = (b+rho*Ax+u)/(rho+num_workers)
     u = u + Ax - z
-    print "Primal residual size=%.3e\tDual residual size=%.3e\t@iteration %s"%(norm(x-z),rho*norm(z-zOld),iteration)
+    print "Primal residual size=%.3e\tDual residual size=%.3e\t@iteration %s"%(norm(Ax-z),rho*norm(z-zOld),iteration)
 
 
 print "Requesting REPORT ..."
