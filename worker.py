@@ -44,7 +44,7 @@ while True:
         b_rest = np.array([float(ss) for ss in s.strip().split(' ')]) # b_rest = zk - bk - uk
         # Do the work
         b = bik + b_rest
-        xk = lasso(M, b, Z, kappa, 3000, rho=1., report=1000)
+        xk = lasso(M, b, Z, kappa, 1000, rho=1., report=1000)
         bik = dot(M,xk)
         # Send results to sink
         sender.send(' '.join([str(bb) for bb in bik]))

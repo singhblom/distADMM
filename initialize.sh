@@ -4,7 +4,9 @@
 # to the worker node, and N is the number of cores for the node, is needed in /home/sgeadmin 
 
 # First start compile ell1.pyx
+cp * /home/sgeadmin
 cd /home/sgeadmin
+chmod +x *.sh
 sudo easy_install cython
 sudo python setup.py build_ext --inplace
 

@@ -1,6 +1,7 @@
 import sys
 import zmq
 import numpy as np
+from numpy.linalg import norm
 
 context = zmq.Context()
 
@@ -20,6 +21,7 @@ rho = 1.0
 b = np.genfromtxt("b.data")
 num_examples = b.shape[0]
 z = np.zeros(num_examples)
+zOld = np.zeros(num_examples)
 u = np.zeros(num_examples)
 Ax = np.zeros(num_examples)
 
@@ -39,18 +41,25 @@ for iteration in range(num_iterations):
         s = receiver.recv()
         Ax += np.array([float(ss) for ss in s.strip().split(' ')])
     Ax /= num_workers
+    zOld = z
     z = (b+rho*Ax+u)/(rho+num_workers)
     u = u + Ax - z
-    print "Iteration %s finished."%iteration
+    print "Primal residual size=%.3e\tDual residual size=%.3e\t@iteration %s"%(norm(x-z),rho*norm(z-zOld),iteration)
+
 
 print "Requesting REPORT ..."
 sender.send("REPORT")
 x_vals = {}
-for task_nbr in range(num_workers):
+reports = 0
+while reports<num_workers:
     s = receiver.recv()
-    sid, sdata = s.split('::')
-    x_vals[sid] = np.array([float(ss) for ss in sdata.strip().split(' ')])
-
+    try:
+        sid, sdata = s.split('::')
+        x_vals[sid] = np.array([float(ss) for ss in sdata.strip().split(' ')])
+        reports+=1
+    except ValueError:
+        pass
+        
 xout = []
 for wID in workerIDs:
     xout.extend(x_vals["%s:%s"%(nID,i)])
