@@ -14,7 +14,7 @@ while read line   # As long as there is another line to read ...
 do
   nodeName=$(echo $line|cut -f1 -d:)
   echo "Starting $numCores workers on node $nodeName"
-  ssh $nodeName < startnode.sh $line &
+  ssh $nodeName < startnode.sh $line
 done
 
 # Then get needed libraries on the master
@@ -33,4 +33,5 @@ sudo python setup.py configure --zmq=/usr/local
 python setup.py install
 
 # Then start master.py
+cd /home/sgeadmin
 python master.py
