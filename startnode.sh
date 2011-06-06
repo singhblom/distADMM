@@ -19,7 +19,7 @@ cd /home/sgeadmin/
 nodeName=$(echo $1|cut -f1 -d:)
 numCores=$(echo $1|cut -f2 -d:)
 for coreNum in $(eval echo {1..$numCores}); do
-  nohup python worker.py $nodeName:$coreNum &
+  nohup python worker.py $nodeName:$coreNum  > $nodeName:$coreNum.log 2>&1 &
 done
 
 exit
