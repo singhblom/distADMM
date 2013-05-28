@@ -1,2 +1,0 @@
-To run on EC2, tar all of these, get them to the cloud with ftp,
-untar, set permissions to runnable, and run ./initialize.sh on master.
